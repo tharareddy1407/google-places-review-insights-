@@ -23,8 +23,8 @@ except Exception:
 # -------------------------
 # Page setup
 # -------------------------
-st.set_page_config(page_title="Google Places Review Insights", layout="wide")
-st.title("Google Places Review Insights (Tableau-ready)")
+st.set_page_config(page_title="Location Intelligence & Review Analytics Platform", layout="wide")
+st.title("Location Intelligence & Review Analytics Platform")
 st.caption("App version: v4.1 (AB search modes + responsive charts)")
 
 api_key = os.getenv("GOOGLE_MAPS_API_KEY", "").strip()
