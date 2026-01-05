@@ -1,0 +1,8 @@
+requests
+pandas
+numpy
+python-dotenv
+vaderSentiment
+matplotlib
+seaborn
+wordcloud
