@@ -6,3 +6,4 @@ vaderSentiment
 matplotlib
 seaborn
 wordcloud
+streamlit
