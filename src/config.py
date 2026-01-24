@@ -12,7 +12,7 @@ class Settings:
     geocode_url: str = "https://maps.googleapis.com/maps/api/geocode/json"
     nearby_url: str = "https://maps.googleapis.com/maps/api/place/nearbysearch/json"
     details_url: str = "https://maps.googleapis.com/maps/api/place/details/json"
-    textsearch_url: str = "https://maps.googleapis.com/maps/api/place/textsearch/json"  # ✅ NEW
+    textsearch_url: str = "https://maps.googleapis.com/maps/api/place/textsearch/json"  
 
     # Nearby Search constraints
     max_nearby_radius_m: int = 50_000  # 50km cap (Google Nearby Search)
@@ -20,7 +20,7 @@ class Settings:
     max_pages_per_tile: int = 3        # Nearby Search pages: up to 3 (20 results each)
 
     # Text Search constraints (Brand Search)
-    max_pages_textsearch: int = 3      # ✅ NEW (Text Search pages: up to 3)
+    max_pages_textsearch: int = 3      #  (Text Search pages: up to 3)
 
     # Rate limiting / token readiness
     next_page_token_wait_sec: float = 2.2
@@ -41,6 +41,6 @@ def load_settings() -> Settings:
             "Example (local): export GOOGLE_MAPS_API_KEY='YOUR_KEY'"
         )
 
-    # ✅ No need to define textsearch_url/max_pages_textsearch here;
+    #  No need to define textsearch_url/max_pages_textsearch here;
     # they live in Settings defaults above.
     return Settings(api_key=key)
