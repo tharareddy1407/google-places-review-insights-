@@ -1,16 +1,15 @@
 # src/text_search_collector.py
 import time
 import math
-from typing import Dict, List, Optional, Set, Tuple
+from typing import Dict, List, Set, Tuple
 
 from .config import Settings
 from .http_client import HttpClient
 
 EARTH_RADIUS_M = 6371000.0
 
-
-def haversine_miles(lat1, lon1, lat2, lon2) -> float:
-    """Distance in miles."""
+def haversine_m(lat1, lon1, lat2, lon2) -> float:
+    """Distance in meters."""
     phi1, phi2 = math.radians(lat1), math.radians(lat2)
     dphi = math.radians(lat2 - lat1)
     dlambda = math.radians(lon2 - lon1)
@@ -20,22 +19,14 @@ def haversine_miles(lat1, lon1, lat2, lon2) -> float:
         + math.cos(phi1) * math.cos(phi2) * math.sin(dlambda / 2) ** 2
     )
 
-    distance_meters = 2 * EARTH_RADIUS_M * math.asin(math.sqrt(a))
-    return distance_meters / 1609.344
+    return 2 * EARTH_RADIUS_M * math.asin(math.sqrt(a))
+
+def haversine_miles(lat1, lon1, lat2, lon2) -> float:
+    """Distance in miles."""
+    return haversine_m(lat1, lon1, lat2, lon2) / 1609.344
 
 
-
-def text_search_pages(
-    client: HttpClient,
-    settings: Settings,
-    query: str,
-) -> List[Dict]:
-    """
-    Google Places Text Search:
-      - returns ranked results
-      - paginated via next_page_token
-      - practical cap ~60 results (3 pages x 20)
-    """
+def text_search_pages(client: HttpClient, settings: Settings, query: str) -> List[Dict]:
     params = {"query": query, "key": settings.api_key}
     all_results: List[Dict] = []
     page = 0
@@ -68,10 +59,6 @@ def collect_places_textsearch(
     filter_center: Tuple[float, float],
     filter_radius_m: float,
 ) -> List[Dict]:
-    """
-    Normalizes Text Search results to the same shape as places_collector.collect_places.
-    Applies strict distance filtering.
-    """
     c_lat, c_lon = filter_center
     raw = text_search_pages(client, settings, query=query)
 
@@ -97,7 +84,6 @@ def collect_places_textsearch(
         places.append({
             "place_id": pid,
             "name": p.get("name"),
-            # text search often provides formatted_address; keep it as "vicinity" too
             "vicinity": p.get("formatted_address") or p.get("vicinity"),
             "lat": p_lat,
             "lon": p_lon,
